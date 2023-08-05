@@ -1,0 +1,55 @@
+@import "~bootstrap/scss/_functions.scss";
+@import "~bootstrap/scss/_variables.scss";
+@import "~bootstrap/scss/mixins/_breakpoints.scss";
+
+.card {
+  $self: &;
+
+  &:hover {
+    #{$self}-btn {
+      opacity: 1;
+    }
+  }
+
+  &-btn {
+    background: transparent;
+    border: 0;
+    position: absolute;
+    top: 6px;
+    font-size: 24px;
+    transition: .3s opacity ease-in-out;
+
+    @include media-breakpoint-up(md) {
+      opacity: 0;
+    }
+  }
+
+  &-update {
+    right: 8px;
+    color: darkgreen;
+  }
+
+  &-remove {
+    left: 8px;
+    color: darkred;
+  }
+
+  &-img-top {
+    width: 72px;
+    margin-inline: auto;
+    border-bottom-left-radius: 100%;
+    border-bottom-right-radius: 100%;
+  }
+
+  &-body {
+    text-align: center;
+  }
+
+  &-title {
+    font-weight: 500;
+  }
+
+  &-text {
+    margin-top: 8px;
+  }
+}
