@@ -1,6 +1,22 @@
-# Getting Started with Create React App
+# User library app for AppsForce
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+simple user library app build with React
+
+## Demo 
+https://user-library-appsforce.web.app/
+
+## Screenshot
+<img width="1384" alt="Screen Shot 2023-08-06 at 8 36 46" src="https://github.com/davidelyosef/users-library-appsforce/assets/52068440/e3a274ee-4185-406a-b2de-7e551b59cb2e">
+
+## Features
+* Add, update, and remove users (locally)
+* search for users, filtering them by name, email, id, and address
+* User management with Redux
+
+## Lessons learned
+I thoroughly enjoyed refreshing my knowledge of the Redux library. 
+Additionally, I had the opportunity to style a page with Bootstrap, I hadn't used it in quite some time, I used to work with SCSS and TailwindCSS. 
+also handling all the use cases for the search filter presented an enjoyable challenge.
 
 ## Available Scripts
 
