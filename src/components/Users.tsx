@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import UserCard from "./UserCard";
 import classes from '../style/Users.module.scss';
 import UserModal from "./UserModal";
 import {useSelector} from "react-redux";
 import {User} from "../interfaces/User";
+import {RootState} from "../interfaces/RootState";
 
 function Users() {
 
-  const users: User[] = useSelector((state: any) => {
+  const users: User[] = useSelector((state: RootState): User[] => {
     return state.filteredUsers
   });
 
@@ -24,14 +25,8 @@ function Users() {
             ))}
           </div>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              color: "red",
-            }}
-          >
-            The users do not exist
+          <div className={"d-flex justify-content-center text-danger"}>
+            There are no users to display.
           </div>
         )}
       </div>
@@ -41,4 +36,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default React.memo(Users);

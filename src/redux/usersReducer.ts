@@ -1,12 +1,7 @@
 import { Reducer } from 'redux';
 import { actionTypes } from "./action-types";
-import { removeUserFromList, updateUserInList } from "./reducerFunctions";
-import {User} from "../interfaces/User";
-
-export interface RootState {
-  users: User[];
-  filteredUsers: User[];
-}
+import {addUserToList, removeUserFromList, updateUserInList} from "./reducerFunctions";
+import {RootState} from "../interfaces/RootState";
 
 const initialState: RootState = {
   users: [],
@@ -23,8 +18,8 @@ const usersReducer: Reducer<RootState, any> = (state = initialState, action) => 
     case actionTypes.ADD_USER:
       return {
         ...state,
-        users: [...state.users, action.payload],
-        filteredUsers: [...state.users, action.payload],
+        users: addUserToList(action.payload, state.users),
+        filteredUsers: addUserToList(action.payload, state.filteredUsers),
       };
     case actionTypes.SET_FILTERED_USERS:
       return {

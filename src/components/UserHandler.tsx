@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import {Form, InputGroup} from "react-bootstrap";
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import AddUserModal from "./AddUserModal";
 import "../style/InputGroup.scss";
 import {User} from "../interfaces/User";
@@ -8,46 +8,62 @@ import {useSelector} from "react-redux";
 import usersStore from "../redux/usersStore";
 import {actionTypes} from "../redux/action-types";
 import FilterCheckboxes from "./FilterCheckboxes";
+import {FilterTypes} from "../enums/enums";
+import {RootState} from "../interfaces/RootState";
 
 function UserHandler() {
 
-  const allUsers: User[] = useSelector((state: any) => state.users);
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [filter, setFilter] = useState("email");
+  const allUsers: User[] = useSelector((state: RootState) => state.users);
+  const [showAddUserModal, setShowAddUserModal] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>(FilterTypes.name);
+  const [inputValue, setInputValue] = useState<string>('');
 
-  const handleAddUser = () => {
-    setShowAddUserModal(true);
-  }
+  useEffect(() => {
+    filterUsers();
+  }, [filter]);
 
-  const filterUsers = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toLowerCase();
+  useEffect(() => {
+    filterUsers();
+  }, [inputValue])
 
+  /**
+   * Filters the users according to the selected filter and input value.
+   */
+  const filterUsers = () => {
     let filteredUsers = allUsers;
     switch (filter) {
-      case "email":
-        filteredUsers = allUsers.filter(user => user[filter].toLowerCase().includes(value));
+      case FilterTypes.email:
+        filteredUsers = allUsers.filter(user => user[filter].toLowerCase().includes(inputValue));
         break;
-      case "name" :
+      case FilterTypes.name :
         filteredUsers = allUsers.filter(user => {
           const fullName = `${user.name.title} ${user.name.first} ${user.name.last}`;
-          return fullName.toLowerCase().includes(value);
+          return fullName.toLowerCase().includes(inputValue);
         });
         break;
-      case "id" :
-        filteredUsers = allUsers.filter(user => user.id.includes(value));
+      case FilterTypes.id :
+        filteredUsers = allUsers.filter(user => user.id.includes(inputValue));
         break;
-      case "location" :
+      case FilterTypes.location :
         filteredUsers = allUsers.filter(user => {
           const {location} = user;
           const fullAddress = `${location.street} ${location.city} ${location.country}`;
-          return fullAddress.toLowerCase().includes(value);
+          return fullAddress.toLowerCase().includes(inputValue);
         });
         break;
       default:
         filteredUsers = allUsers
     }
-
     usersStore.dispatch({type: actionTypes.SET_FILTERED_USERS, payload: filteredUsers});
+  }
+
+  const onInputChanged = (e: ChangeEvent<HTMLInputElement>): void => {
+    const value = (e !== null) ? e?.target.value.toLowerCase() : filter;
+    setInputValue(value);
+  }
+
+  const handleAddUser = (): void => {
+    setShowAddUserModal(true);
   }
 
   return (
@@ -64,7 +80,7 @@ function UserHandler() {
             <InputGroup>
               <Form.Control
                 aria-describedby="inputGroup-sizing-sm"
-                onChange={filterUsers}
+                onChange={onInputChanged}
                 placeholder={"Search for a user"}
               />
             </InputGroup>

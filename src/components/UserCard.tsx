@@ -1,34 +1,35 @@
 import {Card} from "react-bootstrap";
 import "../style/UserCard.scss";
 import {User} from "../interfaces/User";
+import {ModalType} from "../enums/enums";
 
 interface UserCardProps {
   user: User;
   setSelectedUser: (user: User) => void;
-  setModalType: (modalType: 'update' | 'remove') => void;
+  setModalType: (modalType: ModalType) => void;
 }
 
 function UserCard({ user, setSelectedUser, setModalType }: UserCardProps) {
 
-  const onUpdate = () => {
-  setSelectedUser(user);
-  setModalType('update');
+  const onUpdate = (): void => {
+    setSelectedUser(user);
+    setModalType(ModalType.update);
   }
 
-  const onRemove = () => {
-  setSelectedUser(user);
-  setModalType('remove');
+  const onRemove = (): void => {
+    setSelectedUser(user);
+    setModalType(ModalType.remove);
   }
 
   return (
   <Card>
     <Card.Img variant="top" src={user.userImage} alt={user.name.title} />
 
-    <button className="card-btn card-update" title="update" onClick={onUpdate}>
+    <button className="card-btn card-update" title={ModalType.update} onClick={onUpdate}>
       &#9998;
     </button>
 
-    <button className="card-btn card-remove" title="remove" onClick={onRemove}>
+    <button className="card-btn card-remove" title={ModalType.remove} onClick={onRemove}>
       &#10005;
     </button>
 

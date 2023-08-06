@@ -18,23 +18,19 @@ function UserModal({user, setSelectedUser, modalType}: UserModalProps) {
 
   const {users} = store.getState();
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setSelectedUser(null);
   };
 
-  const isValidEmail = (email: string | null) => {
+  const isValidEmail = (email: string | null): boolean => {
     const mailFormat = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return email?.match(mailFormat);
+    return email?.match(mailFormat) !== null;
   }
 
-  const onFormSubmit = (e: FormEvent) => {
+  const onFormSubmit = (e: FormEvent): void => {
     e.preventDefault();
 
-    if (!user) {
-      return;
-    }
-
-    if (!isValidEmail(user.email)) {
+    if (!user || !isValidEmail(user.email)) {
       return;
     }
 
@@ -53,16 +49,13 @@ function UserModal({user, setSelectedUser, modalType}: UserModalProps) {
     handleClose();
   }
 
-  const removeUser = () => {
+  const removeUser = (): void => {
     store.dispatch({type: actionTypes.REMOVE_USER, payload: user});
     handleClose();
   }
 
   return (
-  <div
-    className="modal show"
-    style={user ? {display: 'block', position: 'initial'} : undefined}
-  >
+  <div className={`modal show ${user ? 'd-block' : ''}`}>
     {user && (
     <Modal
       show={!!user}

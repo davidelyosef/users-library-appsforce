@@ -1,16 +1,22 @@
+import {Gender} from "../enums/enums";
+
 export interface User {
-  name: {
-    title: string;
-    first: string;
-    last: string;
-  };
+  name: UserName;
   email: string;
-  gender: string;
+  gender: Gender;
   userImage: string;
-  location: {
-    country: string;
-    city: string;
-    street: string;
-  }
+  location: UserLocation;
   id: string;
+}
+
+interface UserName {
+  title: string;
+  first: string;
+  last: string;
+}
+
+interface UserLocation {
+  country: string;
+  city: string;
+  street: string;
 }

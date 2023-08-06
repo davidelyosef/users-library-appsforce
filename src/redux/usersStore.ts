@@ -1,5 +1,6 @@
 import { createStore, Store } from 'redux';
-import usersReducer, { RootState } from "./usersReducer";
+import usersReducer from "./usersReducer";
+import {RootState} from "../interfaces/RootState";
 
 const usersStore: Store<RootState, any> = createStore(usersReducer);
 

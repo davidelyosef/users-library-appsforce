@@ -9,6 +9,9 @@ import {ChangeEvent, FormEvent, useState} from "react";
 import {useSelector} from "react-redux";
 import {User} from "../interfaces/User";
 import {generateEmptyUser} from "../redux/reducerFunctions";
+import {randomUserImageUrl} from "../config";
+import {Gender} from "../enums/enums";
+import {RootState} from "../interfaces/RootState";
 
 interface AddUserModalProps {
   showAddUserModal: boolean;
@@ -17,29 +20,30 @@ interface AddUserModalProps {
 
 function AddUserModal({showAddUserModal, setShowAddUserModal}: AddUserModalProps) {
 
-  const allUsers = useSelector((state: any) => state.users);
+  const allUsers = useSelector((state: RootState) => state.users);
   const [validated, setValidated] = useState<boolean>(false);
   const [user, setUser] = useState<User>(generateEmptyUser());
 
-  const handleValidate = () => {
+  const handleValidate = (): void => {
     if (!validated) {
       setValidated(true);
     }
   }
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setShowAddUserModal(false);
   };
 
-  const isValidEmail = (email: string) => {
+  const isValidEmail = (email: string): boolean => {
     if (email.length < 3) {
       return false;
     }
+
     const mailFormat = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return email.match(mailFormat);
+    return email.match(mailFormat) !== null;
   }
 
-  const addUser = (e: FormEvent) => {
+  const addUser = (e: FormEvent): void => {
     e.preventDefault();
 
     if (!isValidEmail(user.email)) {
@@ -47,8 +51,6 @@ function AddUserModal({showAddUserModal, setShowAddUserModal}: AddUserModalProps
     }
 
     let emailList = allUsers.map((user: User) => user.email);
-
-    user.id = generateRandomHash(32);
 
     if (emailList.includes(user.email)) {
       alert('Email already exists, please try again.');
@@ -63,27 +65,15 @@ function AddUserModal({showAddUserModal, setShowAddUserModal}: AddUserModalProps
     handleClose();
   }
 
-  const getRandomUserPicture = (gender: string = "male") => {
+  const getRandomUserPicture = (gender: Gender = Gender.male) => {
     switch (gender) {
-      case "male":
-        return `https://randomuser.me/api/portraits/med/men/${Math.floor(Math.random() * 100)}.jpg`;
-      case "female":
-        return `https://randomuser.me/api/portraits/med/women/${Math.floor(Math.random() * 100)}.jpg`;
+      case Gender.male:
+        return randomUserImageUrl(Gender.men);
+      case Gender.female:
+        return randomUserImageUrl(Gender.women);
       default:
         return "";
     }
-  }
-
-  const generateRandomHash = (length: number) => {
-    const characters = "0123456789abcdef";
-    let hash = "";
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      hash += characters[randomIndex];
-    }
-
-    return hash;
   }
 
   return (
@@ -103,10 +93,10 @@ function AddUserModal({showAddUserModal, setShowAddUserModal}: AddUserModalProps
 
         <Modal.Body>
 
-          <Form.Select aria-label="select user gender" className="mb-3" defaultValue="male"
-                       onChange={e => setUser({...user, gender: e.target.value})}>
-            <option value="male">male</option>
-            <option value="female">female</option>
+          <Form.Select aria-label="select user gender" className="mb-3" defaultValue={Gender.male}
+                       onChange={e => setUser({...user, gender: Gender[e.target.value as keyof typeof Gender]})}>
+            <option value={Gender.male}>male</option>
+            <option value={Gender.female}>female</option>
           </Form.Select>
 
           <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
