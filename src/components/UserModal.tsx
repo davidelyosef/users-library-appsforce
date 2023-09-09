@@ -55,7 +55,7 @@ function UserModal({user, setSelectedUser, modalType}: UserModalProps) {
   }
 
   return (
-  <div className={`modal show ${user ? 'd-block' : ''}`}>
+  <>
     {user && (
     <Modal
       show={!!user}
@@ -204,7 +204,7 @@ function UserModal({user, setSelectedUser, modalType}: UserModalProps) {
         </Modal.Footer>
       </Form>
     </Modal>)};
-  </div>)
+  </>)
 }
 
 export default UserModal;
